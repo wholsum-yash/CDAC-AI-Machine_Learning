@@ -1,2 +1,2 @@
-# CDAC-AI-Machine_Learning
-CDAC-Machine Learning:  Notes and Assignments
+# cdac_ML_21_oct_2026
+ML Training

@@ -1,0 +1,74 @@
+# ==========================================
+# 1. CORE SYNTAX & FORMATTING RULES
+# ==========================================
+# - Uses spaces for indentation (tabs will cause errors!)
+# - Key-value pairs are written as key: value (with a space after the colon)
+# - Comments start with a '#'
+# - Case-sensitive: 'AppName' and 'appname' are different keys.
+
+# Scalars (Basic values)
+app_name: "MyApp"              # String (quotes are optional unless special chars are used)
+version: 2                     # Integer
+score: 98.5                    # Float
+is_production: false           # Boolean (true/false or yes/no)
+connection_string: null        # Null / None value
+
+# Sequences (Lists)
+supported_languages:
+  - Python
+  - JavaScript
+  - Go
+
+# Mappings (Dictionaries)
+database:
+  host: "localhost"
+  port: 5432
+  username: "admin"
+  password: "secret"
+
+# Nested Mappings
+server:
+  host: "0.0.0.0"
+  port: 8080
+  ssl:
+    enabled: true
+    certificate: "/path/to/cert.pem"
+
+# Mixed Content
+users:
+  - name: "Alice"
+    age: 30
+    languages:
+      - Python
+      - JavaScript
+  - name: "Bob"
+    age: 25
+    languages:
+      - Go
+      - Rust
+
+# missingness_rules:
+#   knn_imputer:
+#     n_neighbors: 5
+#     weights: "uniform"
+#   indicator_flagging_cols:
+#     - "total_charges"
+#   mnar_sentinel_value: -999.0
+
+nirmal : &ftr
+  age: 28
+  languages:
+    - Python
+    - JavaScript
+  city: "New York"
+
+komal:
+ father: *ftr
+ age: 19
+ hobbies:
+   - Reading
+   - Traveling
+   
+
+
+
