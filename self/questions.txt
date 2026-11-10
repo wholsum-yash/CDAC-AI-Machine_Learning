@@ -1,0 +1,202 @@
+﻿
+User prompt 1 of 1 - 11/10/2026, 9:41:57 PM:
+Go through this pdf and create me mini project type lab exam questions which I shall implement. Closely look at Lab Assignments then generate me questions. Consider in-built python datasets from the libraries for these questions. Also provide me with steps which I need to follow to do solve the question. 
+[Attached file 04_Practical Machine Learning.pdf]
+
+## Mini-project lab exam question bank
+
+### 1. Customer-style segmentation: K-Means, PCA, hierarchical clustering and DBSCAN
+
+**Dataset:** `sklearn.datasets.load_iris`  
+**Exam question:** Treat the four flower measurements as unlabeled data. Find a reasonable number of clusters, compare K-Means with hierarchical clustering and DBSCAN, and explain what the clusters represent. Do not use the species labels to train the models.
+
+**Steps**
+1. Load the measurements into a DataFrame. Keep the species labels aside for an optional comparison at the end.
+2. Check for missing values and standardize the four numeric features. Scaling matters because clustering uses distances.
+3. Fit K-Means for \(k=1\) through \(10\). Record the within-cluster sum of squares (`inertia_`) for each \(k\), then plot the elbow curve.
+4. Calculate silhouette scores for reasonable candidate values of \(k\). Use the elbow and silhouette results together to justify your choice.
+5. For your selected \(k\), report each cluster’s size and average feature values.
+6. Run agglomerative hierarchical clustering; plot a dendrogram if time permits and compare its groupings with K-Means.
+7. Run DBSCAN with at least two `eps`/`min_samples` settings. Report how many points are marked as noise.
+8. Use PCA to make a two-dimensional cluster plot. If desired, compare predictions with the held-aside species labels using adjusted Rand score—but only as a post-hoc check.
+
+**Submit:** elbow plot, silhouette results, cluster profiles, PCA plot and a short justification of the preferred method. K-Means WSS is its within-cluster error measure; do not treat a low WSS alone as proof that your chosen \(k\) is best.
+
+---
+
+### 2. Regression model bake-off
+
+**Dataset:** `sklearn.datasets.load_diabetes`  
+**Exam question:** Predict the dataset’s numeric disease-progression target. Compare Linear, Ridge, Lasso, Elastic Net and degree-2 Polynomial Regression, then recommend one model.
+
+**Steps**
+1. Load the data and identify the target. Inspect feature ranges and target distribution.
+2. Split into training and test sets; keep the test set untouched until final evaluation.
+3. Build preprocessing and model steps in pipelines. Scale features for Ridge, Lasso and Elastic Net; fit polynomial features inside the pipeline to avoid leakage.
+4. Fit the five models. Select regularization parameters using cross-validation on the training set.
+5. On the held-out test set, calculate MAE, MSE, RMSE and \(R^2\).
+6. Compare errors and explain whether polynomial features or regularization helped. Inspect coefficients for the linear and regularized models.
+
+**Submit:** a model/metric comparison table, an actual-versus-predicted plot and a brief conclusion. **Do not report F1-score for this regression task**—F1 is for classification.
+
+---
+
+### 3. SVM classification with hyperparameter tuning
+
+**Dataset:** `sklearn.datasets.load_breast_cancer`  
+**Exam question:** Classify the target into benign or malignant using SVM. Compare an untuned model with GridSearchCV- and RandomizedSearchCV-tuned models.
+
+**Steps**
+1. Load the data and check the class counts. Make a stratified train/test split.
+2. Create a pipeline with `StandardScaler` followed by `SVC`. This ensures scaling is learned from training folds, not the test data.
+3. Fit a baseline SVM. Try linear and RBF kernels.
+4. Tune `C` and, for the RBF kernel, `gamma` with GridSearchCV; use a comparable search space with RandomizedSearchCV.
+5. Use cross-validation on the training data and choose a scoring measure such as `f1_macro`.
+6. Compare baseline and tuned models on the test set using accuracy, macro F1, confusion matrix and classification report.
+7. Explain the false-positive and false-negative counts in the context of the two classes.
+
+**Submit:** chosen parameters, comparison table, confusion matrix and conclusion. The dataset is available through scikit-learn’s built-in loader and has two classes. [2]
+
+---
+
+### 4. KNN versus discriminant analysis
+
+**Dataset:** `sklearn.datasets.load_wine`  
+**Exam question:** Predict the wine class using KNN, Linear Discriminant Analysis (LDA) and Quadratic Discriminant Analysis (QDA). Which performs best on the held-out data?
+
+**Steps**
+1. Load the data; inspect class counts and feature scales.
+2. Use a stratified train/test split.
+3. Build a scaled KNN pipeline. Tune the number of neighbors and distance weighting with cross-validation.
+4. Fit LDA and QDA using training data. If needed, test them with and without scaling and note the difference.
+5. Compare all models using accuracy, macro F1 and confusion matrices.
+6. Explain how KNN’s neighborhood size affects a prediction and why scaling is important for distance-based models.
+
+**Submit:** selected KNN settings, metrics for all three models and a short comparison.
+
+---
+
+### 5. Decision tree and Naïve Bayes classifier
+
+**Dataset:** `sklearn.datasets.load_digits`  
+**Exam question:** Recognize handwritten digits using a Decision Tree and Gaussian Naïve Bayes. Compare their errors and identify which digit pairs are most often confused.
+
+**Steps**
+1. Load the digit features and labels. Inspect a few samples; each example represents an 8×8 digit image.
+2. Make a stratified train/test split.
+3. Train a Decision Tree. Tune `max_depth` and, optionally, `min_samples_leaf` using cross-validation.
+4. Train `GaussianNB` on the same split.
+5. Compare accuracy, macro F1, classification reports and confusion matrices.
+6. For the tree, report feature importance. For Naïve Bayes, explain its conditional-independence assumption.
+7. Select a few misclassified examples and discuss possible reasons for the errors.
+
+**Submit:** metrics, confusion matrices, tree settings and a short error analysis.
+
+---
+
+### 6. Ensemble comparison: Random Forest and Gradient Boosting
+
+**Dataset:** `sklearn.datasets.load_wine`  
+**Exam question:** Compare a single Decision Tree, Random Forest and Gradient Boosting for wine-class prediction. Decide whether the ensembles improve generalization.
+
+**Steps**
+1. Load and split the data using stratification.
+2. Fit a baseline Decision Tree.
+3. Fit Random Forest and Gradient Boosting models with fixed random seeds.
+4. Use cross-validation to tune a small set of parameters, such as tree depth and number of estimators.
+5. Compare accuracy, macro F1 and confusion matrices on the same held-out test set.
+6. Examine feature importance and explain whether the top features are consistent across models.
+7. Discuss the trade-off between a single interpretable tree and an ensemble.
+
+**Submit:** comparison table, one feature-importance plot and a conclusion.
+
+---
+
+### 7. Shop-basket association rules with Apriori
+
+**Data:** A small transaction list you create in Python—for example, 20–50 simulated baskets. There isn’t a suitable built-in scikit-learn shop-basket dataset among its standard offline datasets, so label this clearly as **synthetic practice data**, not real shopping evidence. Apriori expects transactions encoded as items present/absent. [1,3]
+
+**Exam question:** Find frequent itemsets and association rules, then explain what the strongest rules mean for a shop.
+
+**Steps**
+1. Create a reproducible transaction list using a fixed random seed. Include several items with deliberately overlapping patterns.
+2. Convert the transactions to a one-hot Boolean DataFrame with `TransactionEncoder`.
+3. Run `mlxtend.frequent_patterns.apriori` with at least two minimum-support thresholds.
+4. Generate rules with `association_rules`; filter by confidence and lift.
+5. Sort and report the strongest rules. Explain support, confidence and lift in your own words.
+6. Compare how changing the support threshold changes the number of itemsets and rules.
+7. State why results from simulated baskets should not be presented as findings about actual shoppers.
+
+**Submit:** transaction-data preview, frequent itemsets, top rules and threshold comparison. `mlxtend` provides Apriori and association-rule functions for this workflow. [3,4]
+
+---
+
+### 8. Time-series forecasting: smoothing, ACF/PACF, ARMA and ARIMA
+
+**Dataset:** `statsmodels.datasets.co2`  
+**Exam question:** Forecast CO₂ measurements. Compare smoothing methods with ARMA/ARIMA and explain which approach gives the most useful test-period forecast.
+
+**Steps**
+1. Load the CO₂ dataset and inspect its date index, frequency and missing values. The statsmodels dataset contains weekly Mauna Loa measurements. [5]
+2. Prepare a regular time series: either work with the weekly data and handle missing values, or aggregate to monthly means and document your choice.
+3. Plot the series and describe trend and seasonality. Make a chronological train/test split—do not shuffle time-series observations.
+4. Fit a moving-average baseline, Simple Exponential Smoothing, Holt’s trend method and Holt-Winters’ seasonal method if you use a seasonal series.
+5. Plot ACF and PACF. Use them to motivate reasonable AR and MA orders rather than trying arbitrary large models.
+6. Fit an ARMA-style model on a stationary series and an ARIMA model that includes differencing where needed. Keep the differencing/model choice explicit.
+7. Forecast only the held-out period. Compare methods using MAE and RMSE and plot predictions against actual values.
+8. Explain that ARIMA includes an integrated/differencing component, whereas ARMA models a stationary series without that component.
+
+**Submit:** series and ACF/PACF plots, forecast comparison, errors and a conclusion. If your statsmodels version uses a different model-fitting interface, use its current ARIMA/SARIMAX interface.
+
+---
+
+### 9. Movie-recommendation mini-project
+
+**Data:** A small synthetic user–movie ratings matrix created in the notebook. This lets you practise the syllabus workflow without downloading a Kaggle movie dataset; clearly state that the ratings are illustrative, not real user preferences.
+
+**Exam question:** Build a user-based collaborative-filtering recommender. For each user, recommend the top 3 movies they have not rated.
+
+**Steps**
+1. Create a ratings table with columns such as `user_id`, `movie_id` and `rating`. Include missing ratings to represent unseen movies.
+2. Split observed ratings into training and test data. Do not let held-out ratings influence similarity calculations.
+3. Convert the training ratings into a user–movie matrix.
+4. Calculate user similarity, then predict ratings for movies the target user has not rated.
+5. Rank unseen movies and generate top-3 recommendations for several users.
+6. Evaluate recommendations against held-out ratings. Define a relevance threshold, then calculate Precision@K and Recall@K.
+7. Discuss sparse data and cold-start limitations.
+
+**Submit:** the ratings matrix, recommendation examples, evaluation metrics and limitations. For a real movie dataset, replace the synthetic data with one of the course’s downloaded datasets.
+
+---
+
+### 10. Anomaly detection with Isolation Forest
+
+**Data:** Synthetic blobs generated with `sklearn.datasets.make_blobs`, with a small number of deliberately injected outlier points. The generator is built into scikit-learn. [6]
+
+**Exam question:** Use Isolation Forest to identify anomalous observations, then evaluate detection against the known labels you created.
+
+**Steps**
+1. Generate clustered inlier data and add a small, clearly separated set of outliers. Save the true labels before fitting.
+2. Plot the generated points and record the proportion of outliers.
+3. Fit `IsolationForest` using only the feature columns. Set `contamination` to a plausible estimate, and try a second value.
+4. Convert the model’s predictions into inlier/outlier labels and compare them with your saved labels.
+5. Calculate a confusion matrix, precision, recall, F1 and accuracy. Explain why accuracy alone may be misleading when anomalies are rare.
+6. Plot the detected anomalies and discuss any false positives and missed outliers.
+
+**Submit:** plot, confusion matrix, metrics and a short explanation of how changing `contamination` affected detection.
+
+## A reusable workflow for the exam
+
+For any supervised model: **define the target → inspect data → split train/test → preprocess in a pipeline → fit/tune using training data → evaluate once on the test set → interpret errors → write a conclusion.** Think of the test set like questions you haven’t practised: if you use it to tune the model, it stops being a fair final test.
+
+**Teacher Tip:** Keep the metric matched to the task: MAE/RMSE for numeric predictions; accuracy, precision, recall and F1 for class predictions; support, confidence and lift for association rules. For clustering, use measures such as silhouette alongside plots and cluster profiles.
+
+The built-in dataset loaders above are convenient for practice, but the exam questions should be treated as controlled exercises rather than claims about real-world performance. Quack! That’s Ducky’s lab-exam map. What confuses you most about practical machine-learning mini-projects—and when is your lab exam, and do you prefer learning from visuals, code walkthroughs or hands-on prompts?
+
+Read More
+[1] 9.1. Toy datasets — https://scikit-learn.org/stable/datasets/toy_dataset.html
+[2] load_breast_cancer — https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html
+[3] Apriori - mlxtend — https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/
+[4] Association rules - mlxtend — https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/
+[5] Mauna Loa Weekly Atmospheric CO2 Data — https://www.statsmodels.org/devel/datasets/generated/co2.html
+[6] sklearn.datasets — scikit-learn 1.9.1 documentation — https://scikit-learn.org/stable/api/sklearn.datasets.html
